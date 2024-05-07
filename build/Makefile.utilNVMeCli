@@ -1,0 +1,14 @@
+APP_NAME = utilNVMeCli
+
+SRC	= ../src/utils/utilNVMeCli/utilNVMeCli.py
+
+all: GOAL=all
+all: $(APP_NAME)
+
+clean: GOAL=clean
+clean: 
+	rm -rf dist build
+	rm -rf *.spec
+	
+$(APP_NAME):$(SRC)
+	pyinstaller -p ../bin -F $(SRC) && cp dist/$(APP_NAME) ../bin/

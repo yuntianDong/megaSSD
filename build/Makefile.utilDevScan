@@ -1,0 +1,32 @@
+APP_NAME = utilDevScan
+export CC = g++
+
+export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11#-Wall -Werror -std=c++0x
+LDFLAGS  = -L/usr/lib64 -L/usr/local/boost/lib
+LDFLAGS += -ludev
+#LDFLAGS += -lboost_program_options
+
+STATIC_LIBS	= \
+	/usr/local/boost/lib/libboost_program_options.a	\
+
+SUBDIRS :=		\
+	../src/lib/udev	\
+	../src/utils/utilDevScan	\
+
+SUBSRCS:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.cpp))
+	
+all: GOAL=all
+all: $(APP_NAME)
+
+clean: GOAL=clean
+clean: $(SUBDIRS)
+	rm -f *.o
+	rm -f $(APP_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@ $(GOAL)
+
+$(APP_NAME): $(SUBDIRS)
+	$(CC) -o $@ $(SUBSRCS:.cpp=.o) $(STATIC_LIBS) $(LDFLAGS) && cp $(APP_NAME) ../bin/
+	
+.PHONY: all clean $(SUBDIRS)

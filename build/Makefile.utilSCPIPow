@@ -1,0 +1,35 @@
+APP_NAME = utilSCPIPow
+export CC = g++
+
+export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11#-Wall -Werror -std=c++0x
+LDFLAGS  = -L/usr/lib64 -L/usr/local/boost/lib
+LDFLAGS += -lpthread
+
+STATIC_LIBS	= \
+	/usr/local/boost/lib/libboost_program_options.a	\
+	/usr/local/boost/lib/libboost_locale.a	\
+	/usr/local/boost/lib/libboost_system.a	\
+	/usr/local/boost/lib/libboost_thread.a	\
+
+SUBDIRS :=		\
+	../src/lib/serial	\
+	../src/lib/power/scpiPwrCtrlr	\
+	../src/utils/utilSCPIPow	\
+
+SUBSRCS:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.cpp))
+	
+all: GOAL=all
+all: $(APP_NAME)
+
+clean: GOAL=clean
+clean: $(SUBDIRS)
+	rm -f *.o
+	rm -f $(APP_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@ $(GOAL)
+
+$(APP_NAME): $(SUBDIRS)
+	$(CC) -o $@ $(SUBSRCS:.cpp=.o) $(STATIC_LIBS) $(LDFLAGS) && cp $(APP_NAME) ../bin/
+	
+.PHONY: all clean $(SUBDIRS)

@@ -1,0 +1,135 @@
+{
+	"commands" : 
+	{
+		"identify" :
+		{
+			"help" : "NVMe Identify Command",
+			"args" : 
+			[
+				{
+					"long-name"		: "cns",
+					"short-name"	: "c",
+					"type"			: "int",
+					"help"			: "cns value",
+					"default"		: 1
+				},
+				{
+					"long-name"		: "cntid",
+					"short-name"	: "i",
+					"type"			: "int",
+					"help"			: "nvme controller id",
+					"default"		: 0	
+				}
+			],
+			
+			"params" :
+			{
+				"args" : 
+				{
+					"cns"	: ["cdw10",0,8],
+					"cntid"	: ["cdw10",16,16]
+				},
+			
+				"bAdmin"			: true,
+				"mode"				: "in",
+				"nBytes"			: 4096,
+				"opcode"			: 6,
+				"cdw10"				: 0,
+				"cdw11"				: 0,
+				"cdw12"				: 0,
+				"cdw13"				: 0,
+				"cdw14"				: 0,
+				"cdw15"				: 0
+			}
+		},
+		
+		"write" :
+		{
+			"help" : "NVMe IO Write Command",
+			"args" : 
+			[
+				{
+					"long-name"		: "start",
+					"short-name"	: "s",
+					"type"			: "int",
+					"help"			: "start lba",
+					"default"		: 0
+				},
+				{
+					"long-name"		: "length",
+					"short-name"	: "l",
+					"type"			: "int",
+					"help"			: "num of sectors",
+					"default"		: 0	
+				}
+			],
+
+			"params" :
+			{
+				"args" : 
+				{
+					"start"	: ["cdw11",0,32],
+					"length": ["cdw12",0,16]
+				},
+				
+				"buffer" :
+				[
+					[0,32,2882343476]
+				],
+			
+				"bAdmin"			: false,
+				"mode"				: "out",
+				"nBytes"			: 4096,
+				"opcode"			: 1,
+				"cdw10"				: 0,
+				"cdw11"				: 0,
+				"cdw12"				: 0,
+				"cdw13"				: 0,
+				"cdw14"				: 0,
+				"cdw15"				: 0
+			}
+		},
+		
+		"read" :
+		{
+			"help" : "NVMe IO Read Command",
+			"args" : 
+			[
+				{
+					"long-name"		: "start",
+					"short-name"	: "s",
+					"type"			: "int",
+					"help"			: "start lba",
+					"default"		: 0
+				},
+				{
+					"long-name"		: "length",
+					"short-name"	: "l",
+					"type"			: "int",
+					"help"			: "num of sectors",
+					"default"		: 0	
+				}
+			],
+
+			"params" :
+			{
+				"args" : 
+				{
+					"start"	: ["cdw11",0,32],
+					"length": ["cdw12",0,16]
+				},
+			
+				"bAdmin"			: false,
+				"mode"				: "in",
+				"nBytes"			: 4096,
+				"opcode"			: 2,
+				"cdw10"				: 0,
+				"cdw11"				: 0,
+				"cdw12"				: 0,
+				"cdw13"				: 0,
+				"cdw14"				: 0,
+				"cdw15"				: 0
+			}
+		}
+	}
+}

@@ -1,0 +1,52 @@
+{
+	"commands" : 
+	{
+		"fake" :
+		{
+			"help" : "just for test",
+			
+			"args" :
+			[
+				{
+					"long-name"		: "arg1",
+					"short-name"	: "a",
+					"type"          : "int", 
+					"help"          : "argument 1",
+					"default"       : 1 	
+				},
+				{
+					"long-name"		: "arg2",
+					"short-name"	: "b",
+					"type"          : "int", 
+					"help"          : "argument 2",
+					"default"       : 2 					
+				}
+			],
+			
+			"params" :
+			{
+				"args" : 
+				{
+					"arg1"	:	["cdw10",0,8],
+					"arg2"	:	["buffer",0,8]
+				},
+				
+				"buffer" :
+				[
+					[32,8,255]
+				],
+				
+                "bAdmin"            : false,
+                "mode"              : "out",
+                "nBytes"            : 4096,
+                "opcode"            : 0,
+                "cdw10"             : 0,
+                "cdw11"             : 0,
+                "cdw12"             : 0,
+                "cdw13"             : 0,
+                "cdw14"             : 0,
+                "cdw15"             : 0
+			}
+		}
+	}
+}

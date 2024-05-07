@@ -1,0 +1,31 @@
+LIB_NAME = xLogger.so
+export CC = g++
+export DFLAGS = -g
+
+export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11 #-Wall -Werror -std=c++0x
+LDFLAGS = -L/usr/local/include/boost/lib -L/usr/lib/python3.6 -L/usr/lib64 -L/usr/local/lib
+LDFLAGS += -lboost_filesystem
+LDFLAGS += -lboost_python36
+LDFLAGS += -lpython3
+LDFLAGS += -Wl,-rpath,'$$ORIGIN/deps'
+
+SUBDIRS :=		\
+	../src/module/xLogger	\
+
+SUBSRCS:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.cpp))
+	
+all: GOAL=all
+all: $(LIB_NAME)
+
+clean: GOAL=clean
+clean: $(SUBDIRS)
+	rm -f *.o
+	rm -f $(LIB_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@ $(GOAL)
+
+$(LIB_NAME): $(SUBDIRS)
+	$(CC) -shared -o $@ $(SUBSRCS:.cpp=.o) $(LDFLAGS) && cp $(LIB_NAME) ../bin/
+	
+.PHONY: all clean $(SUBDIRS)

@@ -1,0 +1,44 @@
+{
+	"global":
+	{
+		"scriptRoot"	: "/mnt/storage_ssd/Platform/Asha/Code/TCS-356/",
+		"toolPath"		: "/mnt/storage_ssd/Platform/Asha/Code/TCS-356/bin/utilScriptBatch",
+		"taskMnrSID"	: 0,
+		"batchID"		: 0
+	},
+	"duts":
+	{
+		"slotID"	: ["/dev/nvme0n1","/dev/nvme0n1"]
+	},
+	"tasks":
+	{
+		"ut_xBlkDev.py":
+		{
+			"tool"			: "python3",
+			"script"		: "ut/python/ut_xBlkDev.py",
+			"loopcnt"		: 1,
+			"condition"		:
+			[
+				{"key" : "gb","val" : [8],"excluded":false}
+			]
+		},
+		"ut_xBuffer.py":
+		{
+			"tool"			: "python3",
+			"script"		: "ut/python/ut_xBuffer.py",
+			"loopcnt"		: 1
+		},
+		"ut_xSM234.py":
+		{
+			"tool"			: "python3",
+			"script"		: "ut/python/ut_xSM234.py",
+			"loopcnt"		: 1
+		},
+		"ut_xAIO.py":
+		{
+			"tool"			: "python3",
+			"script"		: "ut/python/ut_xAIO.py",
+			"loopcnt"		: 1
+		}
+	}
+}

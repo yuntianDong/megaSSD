@@ -1,0 +1,46 @@
+{
+	"commands" : 
+	{
+		"identify" :
+		{
+			"help" : "NVMe Identify Command",
+			"args" : 
+			[
+				{
+					"long-name"		: "cns",
+					"short-name"	: "c",
+					"type"			: "int",
+					"help"			: "cns value",
+					"default"		: 1
+				},
+				{
+					"long-name"		: "cntid",
+					"short-name"	: "i",
+					"type"			: "int",
+					"help"			: "nvme controller id",
+					"default"		: 0	
+				}
+			],
+			
+			"params" :
+			{
+				"args" : 
+				{
+					"cns"	: ["cdw10",0,8],
+					"cntid"	: ["cdw10",16,16]
+				},
+			
+				"bAdmin"			: true,
+				"mode"				: "in",
+				"nBytes"			: 4096,
+				"opcode"			: 6,
+				"cdw10"				: 0,
+				"cdw11"				: 0,
+				"cdw12"				: 0,
+				"cdw13"				: 0,
+				"cdw14"				: 0,
+				"cdw15"				: 0
+			}
+		}
+	}
+}

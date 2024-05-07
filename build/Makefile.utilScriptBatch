@@ -1,0 +1,13 @@
+SRC	= ../src/utils/utilScriptBatch/ScriptBatch.py
+SRC	+= ../src/utils/utilScriptBatch/utilScriptBatch.py
+
+all:
+	for pyfile in $(SRC);	\
+	do	\
+		pyinstaller -p ../bin -F $$pyfile && cp dist/* ../bin/; \
+	done	\
+
+clean:
+	rm -rf dist build
+	rm -rf *.spec
+	

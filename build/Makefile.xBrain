@@ -1,0 +1,41 @@
+LIB_NAME = xBrain.so
+export CC = g++
+export DFLAGS = -g
+
+export CFLAGS = -DBOOST_ALL_DYN_LINK -DVBOX_DEBUG -fPIC -O0 -W -std=c++11 # 
+LDFLAGS = -L/usr/local/boost_1_67/lib -L/usr/local/python3.5/lib -L/usr/lib64 -L/usr/local/lib64
+LDFLAGS += -lboost_filesystem
+LDFLAGS += -lboost_thread
+LDFLAGS += -lboost_python35
+LDFLAGS += -lpython3.5m
+LDFLAGS += -ludev
+LDFLAGS += -lnanomsg
+
+SUBDIRS :=		\
+	../src/lib/ipc	\
+	../src/lib/udev	\
+	../src/lib/test	\
+	../src/lib/buffer	\
+	../src/lib/device/nvme	\
+	../src/lib/driver/stdkernel	\
+	../src/lib/utility	\
+	../src/lib/net	\
+	../src/module/xBrain	\
+
+SUBSRCS:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.cpp))
+	
+all: GOAL=all
+all: $(LIB_NAME)
+
+clean: GOAL=clean
+clean: $(SUBDIRS)
+	rm -f *.o
+	rm -f $(LIB_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@ $(GOAL)
+
+$(LIB_NAME): $(SUBDIRS)
+	$(CC) -shared -o $@ $(SUBSRCS:.cpp=.o) $(STATIC_LIBS) $(LDFLAGS) && cp $(LIB_NAME) ../bin/
+	
+.PHONY: all clean $(SUBDIRS)

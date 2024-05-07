@@ -1,0 +1,34 @@
+APP_NAME = utilAioPerf
+export CC = g++
+
+#export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11
+export CFLAGS = -O0 -W
+LDFLAGS  = -L/usr/lib64 -L/usr/local/boost/lib
+LDFLAGS += -laio
+
+STATIC_LIBS	= \
+	/usr/local/boost/lib/libboost_program_options.a	\
+
+SUBDIRS :=		\
+	../src/lib/perf	\
+	../src/lib/perf/aio	\
+	../src/utils/utilAioPerf	\
+
+SUBSRCSCFILE:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.c))
+SUBSRCSCPP:= $(foreach n,$(SUBDIRS) , $(wildcard $(n)/*.cpp))
+	
+all: GOAL=all
+all: $(APP_NAME)
+
+clean: GOAL=clean
+clean: $(SUBDIRS)
+	rm -f *.o
+	rm -f $(APP_NAME)
+
+$(SUBDIRS):
+	$(MAKE) -C $@ $(GOAL)
+
+$(APP_NAME): $(SUBDIRS)
+	$(CC) -o $@ $(SUBSRCSCFILE:.c=.o) $(SUBSRCSCPP:.cpp=.o) $(STATIC_LIBS) $(LDFLAGS) && cp $(APP_NAME) ../bin/
+	
+.PHONY: all clean $(SUBDIRS)

@@ -1,0 +1,88 @@
+{
+	"global":
+	{
+		"scriptRoot"	: "",
+		"toolPath"		: "./utilScriptBatch",
+		"taskMnrSID"	: 0,
+		"batchID"		: 0
+	},
+	"duts":
+	{
+		"slotID"	: ["/dev/nvme0n1","/dev/nvme0n1","/dev/nvme0n1"]
+	},
+	"tasks":
+	{
+		"Case1.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(1)'",
+			"loopcnt"		: 1
+		},
+		"Case2.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(2)'",
+			"loopcnt"		: 1
+		},
+		"Case3.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(3)'",
+			"loopcnt"		: 1
+		},
+		"Case4.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(4)'",
+			"loopcnt"		: 1
+		},
+		"Case5.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(1)'",
+			"loopcnt"		: 1
+		},
+		"Case6.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(10)'",
+			"loopcnt"		: 1
+		},
+		"Case7.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(60)'",
+			"loopcnt"		: 1
+		},
+		"Case8.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(20)'",
+			"loopcnt"		: 1
+		},
+		"Case9.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(5)'",
+			"loopcnt"		: 1
+		},
+		"Case10.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(4)'",
+			"loopcnt"		: 1
+		},
+		"Case11.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(3)'",
+			"loopcnt"		: 1
+		},
+		"Case12.py":
+		{
+			"tool"			: "python3",
+			"script"		: "-c 'import time;time.sleep(2)'",
+			"loopcnt"		: 1
+		}
+	}
+}
