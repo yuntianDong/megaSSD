@@ -7,7 +7,7 @@ LDFLAGS = -L/usr/lib/python3.6 -L/usr/lib64 -L/usr/local/lib -L/usr/local/spdk/l
 LDFLAGS += -lboost_filesystem
 LDFLAGS += -lboost_python36
 LDFLAGS += -lpython3
-LDFLAGS += -ludev -lssl -lcrypto
+LDFLAGS += -ludev -lssl -lcrypto -lpci
 LDFLAGS += -lspdk -lspdk_env_dpdk
 LDFLAGS += -lrte_vhost -lrte_security -lrte_reorder -lrte_dmadev \
 			-lrte_power -lrte_cryptodev -lrte_compressdev -lrte_timer -lrte_hash \
@@ -24,6 +24,7 @@ SUBDIRS :=		\
 	../src/lib/utility	\
 	../src/lib/pattern \
 	../src/module/xNVMe	\
+	../src/lib/device	\
 
 SUBSRCS:=	../src/module/xBuffer/IHostBufMngr.cpp \
 			../src/module/xPattern/IPatternMngr.cpp \

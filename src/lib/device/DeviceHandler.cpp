@@ -24,7 +24,7 @@ SPDKHandler::SPDKHandler(const char *bdf,int idx):DeviceHandler()
     mdev->SetDriver(UIO_IN_USE);
 }
 
-void SPDKHandler::GenOperator(const char *bdf)
+void SPDKHandler::GenOperator(const char *bdf,int nsid)
 {
     //use spdk fuc to connect ctrlr
     struct spdk_nvme_transport_id trid;
@@ -52,10 +52,17 @@ void SPDKHandler::ReleaseOperator(void)
     }
 }
 
-KernelHandler::KernelHandler(const char *bdf,int idx):DeviceHandler()
+KernelHandler::KernelHandler(const char *bdf,int idx,int nsid):DeviceHandler()
 {
     devoperator = new Operator;
-    GenOperator(bdf);
+    if (nsid != -1 && nsid != 0)
+    {
+        GenOperator(bdf,nsid);
+    }
+    else
+    {
+        GenOperator(bdf);
+    }
     //Generate Kernel device
     mdev = (Device*)new KernelDevice(devoperator);
     mdev->SetBdf(bdf);
@@ -63,14 +70,20 @@ KernelHandler::KernelHandler(const char *bdf,int idx):DeviceHandler()
     mdev->SetDriver(NVME_IN_USE); 
 }
 
-void KernelHandler::GenOperator(const char *bdf)
+void KernelHandler::GenOperator(const char *bdf,int nsid)
 {
     PCIAddr *pciaddr = new PCIAddr(bdf);
     NVMeScan *nvmeScan = new NVMeScan;
-    const char *kernelDevName = nvmeScan->GetDevNameByPciAddr(pciaddr);
+    std::string kernelDevName(nvmeScan->GetDevNameByPciAddr(pciaddr));
+    
+    if (nsid != -1 && nsid != 0)
+    {
+        kernelDevName += "n" + std::to_string(nsid);
+        LOGDEBUG("open device : %s",kernelDevName.c_str());
+    }
     int fd	= 0;
 
-    if( (fd = open(kernelDevName,O_RDWR)) < 0 )
+    if( (fd = open(kernelDevName.c_str(),O_RDWR)) < 0 )
     {
         LOGERROR("Cannot open device: %s,Error:%d\n",kernelDevName,fd);
         devoperator->SetNVMeFd(INVALID_DEVHDLR);
@@ -108,7 +121,7 @@ PcieHandler::PcieHandler(const char *bdf,int idx):DeviceHandler()
     mdev->SetBdfID(idx);
     mdev->SetDriver(PCIE_IN_USE);
 }
-void PcieHandler::GenOperator(const char *bdf)
+void PcieHandler::GenOperator(const char *bdf,int nsid)
 {
     int mPciFd;
     uint8_t domain,bus,dev,func;

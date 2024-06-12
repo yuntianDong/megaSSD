@@ -93,7 +93,7 @@ int DeviceMngr::GetDevAllBdf(const char *bdf,const char *mbdf[])
         }
 
         uint64_t dsn = this->GetDSN(scanbdf);
-        if(mdsn == dsn)
+        if(mdsn != -1 && dsn != -1 && mdsn == dsn)
         {
             mbdf[++bdfIdx] = scanbdf;
         }
@@ -122,7 +122,7 @@ int DeviceMngr::GetDevAllBdf(const char *bdf,const char *mbdf[])
             continue;
         }
         uint64_t dsn = this->GetDSN(scanbdf);
-        if(mdsn == dsn)
+        if(mdsn != -1 && dsn != -1 && mdsn == dsn)
         {
             mbdf[++bdfIdx] = scanbdf;
         }

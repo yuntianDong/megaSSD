@@ -835,7 +835,13 @@ bool NVMeNVMCmd::LoadChildContext(ChildContext* child)
 
 bool NVMeNVMCmd::IsChildContextLoaded(void)
 {
-	return (childContext == nullptr) ? false : true;
+	bool res;
+	res = (childContext == nullptr) ? false : true;
+	if (res == false)
+	{
+		LOGERROR("nsid : %d context not loaded!",mnsid);
+	}
+	return res;
 }
 
 NVMeCmdResp* NVMeNVMCmd::IoPassthrough(uint32_t cdw0,uint32_t cdw1,uint32_t cdw2,uint32_t cdw3,\
@@ -901,6 +907,7 @@ NVMeCmdResp* NVMeNVMCmd::Compare(uint64_t slba,uint16_t length,uint8_t prinfo,\
 	cmd.SetDXferMode(GetDataXferMode());
 	cmd.SetNSID(mnsid);
 
+	this->IsChildContextLoaded();
 	uint32_t sectorSize = childContext->GetNsDataSize();
 	uint32_t metaSize = childContext->GetNsMetaSize();
 	uint32_t dBufLen = (length + 1) * sectorSize;
@@ -1007,6 +1014,7 @@ NVMeCmdResp* NVMeNVMCmd::Read(uint64_t slba,uint16_t length,uint8_t prinfo,\
 	cmd.SetDXferMode(GetDataXferMode());
 	cmd.SetNSID(mnsid);
 
+	this->IsChildContextLoaded();
 	uint32_t sectorSize = childContext->GetNsDataSize();
 	uint32_t metaSize = childContext->GetNsMetaSize();
 	uint32_t dBufLen = (length + 1) * sectorSize;
@@ -1147,7 +1155,7 @@ NVMeCmdResp* NVMeNVMCmd::Write(uint64_t slba,uint16_t length,uint8_t prinfo,\
 	cmd.SetDXferMode(GetDataXferMode());
 	cmd.SetNSID(mnsid);
 
-
+	this->IsChildContextLoaded();
 	uint32_t sectorSize = childContext->GetNsDataSize();
 	uint32_t metaSize = childContext->GetNsMetaSize();
 	uint32_t dBufLen = (length + 1) * sectorSize;

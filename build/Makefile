@@ -2,7 +2,8 @@
 SUBDIRS := \
 	.\
 	
-MKFILE_LIST	:=	$(foreach n,$(SUBDIRS) , $(wildcard Makefile.*))
+# MKFILE_LIST	:=	$(foreach n,$(SUBDIRS) , $(wildcard Makefile.*))
+MKFILE_LIST	:=	Makefile.xBuffer Makefile.xDevice Makefile.xContext Makefile.xNVMe Makefile.xPattern
 
 all: GOAL=all
 all: $(MKFILE_LIST)

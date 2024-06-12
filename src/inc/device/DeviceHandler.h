@@ -21,7 +21,7 @@ public:
 		del_obj(mdev);
 	};
 
-	virtual void GenOperator(const char *bdf)=0;
+	virtual void GenOperator(const char *bdf,int nsid = -1)=0;
 	virtual void ReleaseOperator(void)=0;
 	Device* GetDevice(void)
 	{ 
@@ -48,14 +48,14 @@ public:
 		del_obj(devoperator);
 	};
 
-	void GenOperator(const char *bdf);
+	void GenOperator(const char *bdf,int nsid = -1);
 	void ReleaseOperator(void);
 };
 
 class KernelHandler:public DeviceHandler
 {
 public:
-	KernelHandler(const char* bdf,int idx);
+	KernelHandler(const char* bdf,int idx,int nsid = -1);
 	~KernelHandler()
 	{
 		if(devoperator->GetNVMeFd() != INVALID_DEVHDLR)
@@ -64,7 +64,7 @@ public:
 		}
 		del_obj(devoperator);
 	};
-	void GenOperator(const char *bdf);
+	void GenOperator(const char *bdf,int nsid = -1);
 	void ReleaseOperator(void);
 };
 
@@ -84,7 +84,7 @@ public:
 		pci_cleanup(mPacc);
 	};
 
-	void GenOperator(const char *bdf);
+	void GenOperator(const char *bdf,int nsid = -1);
 	void ReleaseOperator(void);
 };
 #endif
