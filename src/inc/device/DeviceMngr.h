@@ -6,8 +6,9 @@ private:
     DeviceHandler *mpPcieDeviceHandler[MAX_DEVICE_NUM];
     DeviceHandler *mpNVMeDeviceHandler[MAX_DEVICE_NUM];
     const char *mbdf[MAX_DEVICE_NUM];
+    bool ifrestore;
 public:
-    DeviceMngr(const char *bdf);
+    DeviceMngr(const char *bdf,bool ifrestore=false);
     ~DeviceMngr();
 
     int GetDevAllBdf(const char *bdf,const char *mbdf[]);

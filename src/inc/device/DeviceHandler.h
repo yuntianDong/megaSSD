@@ -3,9 +3,9 @@
 
 #include "device/Devices.h"
 #include "device/NVMeScan.h"
-#define PCI_BAR_PATH	"/sys/bus/pci/devices/%04x:%02x:%02x.%x/resource0"
-#define MAP_SIZE		4096
-#define SPDK_ENV_OPT_NAME	"asha"
+#define PCI_BAR_PATH "/sys/bus/pci/devices/%04x:%02x:%02x.%x/resource0"
+#define MAP_SIZE 4096
+#define SPDK_ENV_OPT_NAME "asha"
 
 class DeviceHandler
 {
@@ -21,62 +21,65 @@ public:
 		del_obj(mdev);
 	};
 
-	virtual void GenOperator(const char *bdf,int nsid = -1)=0;
-	virtual void ReleaseOperator(void)=0;
-	Device* GetDevice(void)
-	{ 
-		if(mdev)
+	virtual void GenOperator(const char *bdf, int nsid = -1) = 0;
+	virtual void ReleaseOperator(void) = 0;
+	Device *GetDevice(void)
+	{
+		if (mdev)
 		{
 			return mdev;
-		}else{
+		}
+		else
+		{
 			LOGERROR("Invalid ctrlrID\n");
 		}
 		return nullptr;
 	};
 };
 
-class SPDKHandler:public DeviceHandler
+class SPDKHandler : public DeviceHandler
 {
 public:
-	SPDKHandler(const char* bdf,int idx);
+	SPDKHandler(const char *bdf, int idx, bool ifrestore = false);
 	~SPDKHandler()
 	{
-		if(devoperator->GetSpdkCtrlr())
+		if (devoperator->GetSpdkCtrlr())
 		{
 			ReleaseOperator();
 		}
 		del_obj(devoperator);
 	};
 
-	void GenOperator(const char *bdf,int nsid = -1);
+	void GenOperator(const char *bdf, int nsid = -1);
 	void ReleaseOperator(void);
 };
 
-class KernelHandler:public DeviceHandler
+class KernelHandler : public DeviceHandler
 {
 public:
-	KernelHandler(const char* bdf,int idx,int nsid = -1);
+	KernelHandler(const char *bdf, int idx, int nsid = -1);
 	~KernelHandler()
 	{
-		if(devoperator->GetNVMeFd() != INVALID_DEVHDLR)
+		if (devoperator->GetNVMeFd() != INVALID_DEVHDLR)
 		{
 			ReleaseOperator();
 		}
 		del_obj(devoperator);
 	};
-	void GenOperator(const char *bdf,int nsid = -1);
+	void GenOperator(const char *bdf, int nsid = -1);
 	void ReleaseOperator(void);
 };
 
-class PcieHandler:public DeviceHandler
+class PcieHandler : public DeviceHandler
 {
 private:
 	struct pci_access *mPacc;
+
 public:
-	PcieHandler(const char* bdf,int idx);
+	PcieHandler(const char *bdf, int idx);
 	~PcieHandler()
 	{
-		if(devoperator->GetPcieDev())
+		if (devoperator->GetPcieDev())
 		{
 			ReleaseOperator();
 		}
@@ -84,7 +87,7 @@ public:
 		pci_cleanup(mPacc);
 	};
 
-	void GenOperator(const char *bdf,int nsid = -1);
+	void GenOperator(const char *bdf, int nsid = -1);
 	void ReleaseOperator(void);
 };
 #endif
