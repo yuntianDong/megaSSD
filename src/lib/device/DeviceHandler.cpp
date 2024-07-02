@@ -12,7 +12,6 @@ SPDKHandler::SPDKHandler(const char *bdf, int idx, bool ifrestore) : DeviceHandl
     opts.name = SPDK_ENV_OPT_NAME;
     if (ifrestore == true)
     {
-        spdk_env_fini();
         if (spdk_env_init(NULL) < 0)
         {
             LOGWARN("Unable to reinitialize SPDK env\n");

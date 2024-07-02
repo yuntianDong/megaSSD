@@ -51,6 +51,7 @@ public:
     void CloseDev(void)
     {
         del_obj(mpDevMngr);
+        spdk_env_fini();
     }
 
     Device *RestoreDev(uint32_t idx, const char *driver)
