@@ -112,7 +112,8 @@ BOOST_PYTHON_MODULE(xNVMe)
 
 	class_<INVMeDevice>("INVMeDevice")
 					.def("GetCtrlr",&INVMeDevice::GetCtrlr,python::return_value_policy<python::manage_new_object>())
-					.def("GetNS",&INVMeDevice::GetNS,python::return_value_policy<python::manage_new_object>());
+					.def("GetNS",&INVMeDevice::GetNS,python::return_value_policy<python::manage_new_object>())
+					.def("ReleaseNS",&INVMeDevice::ReleaseNS);
 
 	class_<NVMeManager>("NVMeManager",init<Device*>())
 					.def("Reset",&NVMeManager::NVMeReset)

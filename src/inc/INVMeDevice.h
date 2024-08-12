@@ -18,6 +18,7 @@ public:
 
 	NVMeAdminCmd* GetCtrlr(Device* device);
 	NVMeNVMCmd* GetNS(Device* device,uint32_t nsID);
+	void ReleaseNS(uint32_t nsID);
 	~INVMeDevice()
 	{
 		for (int idx = 0; idx < NS_MAX_NUM; idx++)

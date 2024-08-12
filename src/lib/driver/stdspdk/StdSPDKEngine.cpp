@@ -28,26 +28,8 @@ NVMeCmdResp* StdSPDKEngine::NVMePassthru(NVMeCmdReq &req,void* dBuf,uint32_t dBu
     gettimeofday(&start,NULL);
     if(req.isAdminCmd())
     {
-        switch (cmd.opc)
-        {
-        // case NVME_ADMIN_OP_FWCOMMIT:
-        //     spdk_nvme_fw_commit fw_commit;
-        //     memcpy(&fw_commit,&cmd.cdw10,sizeof(uint32_t));
-        //     ret = 
-        //     break;
-        // case NVME_ADMIN_OP_FORMATNVM:
-        //     spdk_nvme_format format;
-        //     memcpy(&format,&cmd.cdw10,sizeof(uint32_t));
-        //     ret = spdk_nvme_ctrlr_format(mCtrlr,cmd.nsid,&format);
-        //     break;
-        
-        default:
-            ret = spdk_nvme_ctrlr_cmd_admin_raw(mCtrlr,&cmd,dBuf,dBufLen,CmdCompletion,(void*)resp);
-            while(!spdk_nvme_ctrlr_process_admin_completions(mCtrlr));
-            break;
-        }
-        // ret = spdk_nvme_ctrlr_cmd_admin_raw(mCtrlr,&cmd,dBuf,dBufLen,CmdCompletion,(void*)resp);
-        // while(!spdk_nvme_ctrlr_process_admin_completions(mCtrlr));
+        ret = spdk_nvme_ctrlr_cmd_admin_raw(mCtrlr,&cmd,dBuf,dBufLen,CmdCompletion,(void*)resp);
+        while(!spdk_nvme_ctrlr_process_admin_completions(mCtrlr));
     }else{
         struct spdk_nvme_qpair *qpair;
         qpair = spdk_nvme_ctrlr_alloc_io_qpair(mCtrlr, NULL, 0);

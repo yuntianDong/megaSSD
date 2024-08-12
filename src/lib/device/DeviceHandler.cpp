@@ -98,7 +98,7 @@ void KernelHandler::GenOperator(const char *bdf, int nsid)
 
     if ((fd = open(kernelDevName.c_str(), O_RDWR)) < 0)
     {
-        LOGERROR("Cannot open device: %s,Error:%d\n", kernelDevName, fd);
+        LOGERROR("Cannot open device: %s,Error:%d\n", kernelDevName.c_str(), fd);
         devoperator->SetNVMeFd(INVALID_DEVHDLR);
     }
 

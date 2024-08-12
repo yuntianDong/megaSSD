@@ -32,15 +32,8 @@ NVMeNVMCmd* INVMeDevice::GetNS(Device* device,uint32_t nsID)
 	}
 	else if (strcmp(device->GetDriver(),NVME_IN_USE) == 0)
 	{
-		if (nvmeNsHandlers[nsID-1] != nullptr)
-		{
-			getIO = new NVMeNVMCmd(nvmeNsHandlers[nsID-1]->GetDevice(),nsID);
-		}
-		else
-		{
-			nvmeNsHandlers[nsID-1] = (DeviceHandler*)new KernelHandler(device->GetBdf(),device->GetBdfID(),nsID);
-			getIO = new NVMeNVMCmd(nvmeNsHandlers[nsID-1]->GetDevice(),nsID);
-		}
+		nvmeNsHandlers[nsID-1] = (DeviceHandler*)new KernelHandler(device->GetBdf(),device->GetBdfID(),nsID);
+		getIO = new NVMeNVMCmd(nvmeNsHandlers[nsID-1]->GetDevice(),nsID);
 	}
 	else
 	{
@@ -48,4 +41,26 @@ NVMeNVMCmd* INVMeDevice::GetNS(Device* device,uint32_t nsID)
 	}
 
 	return getIO;
+}
+
+void INVMeDevice::ReleaseNS(uint32_t nsID)
+{
+	if (nsID == NS_ID_SPECIAL)
+	{
+		for (auto* item : nvmeNsHandlers)
+		{
+			if (item != nullptr)
+			{
+				close(item->GetDevice()->GetOperator()->GetNVMeFd());
+				del_obj(item);
+			}
+		}
+	}else{
+		if (nvmeNsHandlers[nsID-1]->GetDevice() != nullptr)
+		{
+			int fd = nvmeNsHandlers[nsID-1]->GetDevice()->GetOperator()->GetNVMeFd();
+			close(fd);
+			del_obj(nvmeNsHandlers[nsID-1]);
+		}
+	}
 }
