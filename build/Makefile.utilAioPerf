@@ -1,8 +1,8 @@
 APP_NAME = utilAioPerf
 export CC = g++
 
-#export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11
-export CFLAGS = -O0 -W
+#export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O2 -W -std=c++11
+export CFLAGS = -O2 -W
 LDFLAGS  = -L/usr/lib64 -L/usr/local/boost/lib
 LDFLAGS += -laio
 

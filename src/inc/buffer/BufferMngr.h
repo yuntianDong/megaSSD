@@ -4,7 +4,7 @@
 #include "BufferPool.h"
 
 #define DEFAULT_BUF_ITEMSIZE		512
-#define FRMWK_POOL_NAME_LEN			10
+#define FRMWK_POOL_NAME_LEN			11
 
 class IoBufPool : public RingBufPool
 {

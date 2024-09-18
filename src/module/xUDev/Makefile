@@ -1,5 +1,5 @@
 INCLUDES = -I. -I/usr/local/include  -I../../inc \
-	 -I/usr/local/boost/include -I/usr/local/python3.5/include/python3.5m \
+	 -I/usr/local/boost_1_78/include/ -I/usr/include/python3.6m/ \
 	 
 SRC =			\
 	Wrapper.cpp	\

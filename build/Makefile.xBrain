@@ -2,7 +2,7 @@ LIB_NAME = xBrain.so
 export CC = g++
 export DFLAGS = -g
 
-export CFLAGS = -DBOOST_ALL_DYN_LINK -DVBOX_DEBUG -fPIC -O0 -W -std=c++11 # 
+export CFLAGS = -DBOOST_ALL_DYN_LINK -DVBOX_DEBUG -fPIC -O2 -W -std=c++11 # 
 LDFLAGS = -L/usr/local/boost_1_67/lib -L/usr/local/python3.5/lib -L/usr/lib64 -L/usr/local/lib64
 LDFLAGS += -lboost_filesystem
 LDFLAGS += -lboost_thread

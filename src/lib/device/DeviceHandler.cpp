@@ -1,5 +1,4 @@
 #include "device/DeviceHandler.h"
-#include <boost/format.hpp>
 
 SPDKHandler::SPDKHandler(const char *bdf, int idx, bool ifrestore) : DeviceHandler()
 {
@@ -26,12 +25,18 @@ SPDKHandler::SPDKHandler(const char *bdf, int idx, bool ifrestore) : DeviceHandl
     }
     // Generate operator, get SPDK ctrlr
     GenOperator(bdf);
-
-    // Generate SPDK device
-    mdev = (Device *)new SPDKDevice(devoperator);
-    mdev->SetBdf(bdf);
-    mdev->SetBdfID(idx);
-    mdev->SetDriver(UIO_IN_USE);
+    if (devoperator->GetSpdkCtrlr() == nullptr)
+    {
+        mdev = nullptr;
+    }
+    else
+    {
+        // Generate SPDK device
+        mdev = (Device *)new SPDKDevice(devoperator);
+        mdev->SetBdf(bdf);
+        mdev->SetBdfID(idx);
+        mdev->SetDriver(UIO_IN_USE);
+    }
 }
 
 void SPDKHandler::GenOperator(const char *bdf, int nsid)
@@ -47,21 +52,22 @@ void SPDKHandler::GenOperator(const char *bdf, int nsid)
     spdk_nvme_ctrlr_get_default_ctrlr_opts(&ctrlr_opts, sizeof(ctrlr_opts));
 
     devoperator->SetSpdkCtrlr(spdk_nvme_connect(&trid, &ctrlr_opts, sizeof(ctrlr_opts)));
-
-    assert(devoperator->GetSpdkCtrlr() != nullptr);
 }
 
 void SPDKHandler::ReleaseOperator(void)
 {
-    struct spdk_nvme_detach_ctx *detach_ctx = nullptr;
-    spdk_nvme_detach_async(devoperator->GetSpdkCtrlr(), &detach_ctx);
-    if (detach_ctx)
+    if (mdev != nullptr)
     {
-        spdk_nvme_detach_poll(detach_ctx);
-    }
-    else
-    {
-        detach_ctx = nullptr;
+        struct spdk_nvme_detach_ctx *detach_ctx = nullptr;
+        spdk_nvme_detach_async(devoperator->GetSpdkCtrlr(), &detach_ctx);
+        if (detach_ctx)
+        {
+            spdk_nvme_detach_poll(detach_ctx);
+        }
+        else
+        {
+            detach_ctx = nullptr;
+        }
     }
 }
 
@@ -76,18 +82,31 @@ KernelHandler::KernelHandler(const char *bdf, int idx, int nsid) : DeviceHandler
     {
         GenOperator(bdf);
     }
-    // Generate Kernel device
-    mdev = (Device *)new KernelDevice(devoperator);
-    mdev->SetBdf(bdf);
-    mdev->SetBdfID(idx);
-    mdev->SetDriver(NVME_IN_USE);
+    if (devoperator->GetNVMeFd() == INVALID_DEVHDLR)
+    {
+        mdev = nullptr;
+    }
+    else
+    {
+        // Generate Kernel device
+        mdev = (Device *)new KernelDevice(devoperator);
+        mdev->SetBdf(bdf);
+        mdev->SetBdfID(idx);
+        mdev->SetDriver(NVME_IN_USE);
+    }
 }
 
 void KernelHandler::GenOperator(const char *bdf, int nsid)
 {
     PCIAddr *pciaddr = new PCIAddr(bdf);
     NVMeScan *nvmeScan = new NVMeScan;
-    std::string kernelDevName(nvmeScan->GetDevNameByPciAddr(pciaddr));
+    const char *devName = nvmeScan->GetLinkNameByPciAddr(pciaddr);
+    if (strlen(devName) == 0)
+    {
+        LOGDEBUG("no udev link find, use default nvme node name");
+        devName = nvmeScan->GetDevNameByPciAddr(pciaddr);
+    }
+    std::string kernelDevName(devName);
 
     if (nsid != -1 && nsid != 0)
     {
@@ -99,10 +118,9 @@ void KernelHandler::GenOperator(const char *bdf, int nsid)
     if ((fd = open(kernelDevName.c_str(), O_RDWR)) < 0)
     {
         LOGERROR("Cannot open device: %s,Error:%d\n", kernelDevName.c_str(), fd);
-        devoperator->SetNVMeFd(INVALID_DEVHDLR);
+        fd = INVALID_DEVHDLR;
     }
 
-    assert(fd != INVALID_DEVHDLR);
     devoperator->SetNVMeFd(fd);
 
     if (nullptr != pciaddr)
@@ -119,8 +137,11 @@ void KernelHandler::GenOperator(const char *bdf, int nsid)
 
 void KernelHandler::ReleaseOperator(void)
 {
-    close(devoperator->GetNVMeFd());
-    devoperator->SetNVMeFd(INVALID_DEVHDLR);
+    if (mdev != nullptr)
+    {
+        close(devoperator->GetNVMeFd());
+        devoperator->SetNVMeFd(INVALID_DEVHDLR);
+    }
 }
 
 PcieHandler::PcieHandler(const char *bdf, int idx) : DeviceHandler()
@@ -129,40 +150,41 @@ PcieHandler::PcieHandler(const char *bdf, int idx) : DeviceHandler()
     mPacc = pci_alloc();
     pci_init(mPacc);
     GenOperator(bdf);
-    mdev = (Device *)new PcieDevice(devoperator);
-    mdev->SetBdf(bdf);
-    mdev->SetBdfID(idx);
-    mdev->SetDriver(PCIE_IN_USE);
+    if ((devoperator->GetPcieDev() == nullptr) || (devoperator->GetBarMemBase() == nullptr))
+    {
+        mdev = nullptr;
+    }
+    else
+    {
+        mdev = (Device *)new PcieDevice(devoperator);
+        mdev->SetBdf(bdf);
+        mdev->SetBdfID(idx);
+        mdev->SetDriver(PCIE_IN_USE);
+    }
 }
 void PcieHandler::GenOperator(const char *bdf, int nsid)
 {
     int mPciFd;
-    uint8_t domain, bus, dev, func;
+    unsigned int domain, bus, dev, func;
 
-    // get domain,bus,dev,func through bdf
-    std::string mbdf(bdf);
-    uint32_t temp[4];
-    std::istringstream iss(mbdf);
-    char delim;
-
-    iss >> std::hex >> temp[0] >> delim >> temp[1] >> delim >> temp[2] >> delim >> temp[3];
-
-    domain = static_cast<uint8_t>(temp[0]);
-    bus = static_cast<uint8_t>(temp[1]);
-    dev = static_cast<uint8_t>(temp[2]);
-    func = static_cast<uint8_t>(temp[3]);
+    // get domain, bus, dev, func through bdf
+    sscanf(bdf, "%x:%x:%x.%x", &domain, &bus, &dev, &func);
 
     // Generate operator
     devoperator->SetPcieDev(pci_get_dev(mPacc, domain, bus, dev, func));
-    assert(devoperator->GetPcieDev() != nullptr);
 
     char mPCIeBarRes[100];
     sprintf(mPCIeBarRes, PCI_BAR_PATH, domain, bus, dev, func);
     mPciFd = open(mPCIeBarRes, O_RDWR);
 
-    assert(mPciFd != INVALID_DEVHDLR);
-
-    devoperator->SetBarMemBase(mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mPciFd, 0));
+    if (mPciFd == INVALID_DEVHDLR)
+    {
+        devoperator->SetBarMemBase(nullptr);
+    }
+    else
+    {
+        devoperator->SetBarMemBase(mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, mPciFd, 0));
+    }
 
     if (mPciFd != INVALID_DEVHDLR)
     {

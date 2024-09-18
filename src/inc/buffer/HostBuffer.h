@@ -6,7 +6,7 @@
 #define HOST_BUFFER_ALIGNMENT			DEF_BUF_ALIGNMENT
 #define SWAP_BUF_PIECE_UNIT				(64*1024*1024)	// 64MB -> 256GB
 #define SWAP_BUF_FNAME_PRE				"SWAPBUF"
-#define SWAP_BUF_NAME_LEN				10
+#define SWAP_BUF_NAME_LEN				11
 #define SWAP_BUF_FNAME_LEN				40
 
 typedef struct _stBufPatRec

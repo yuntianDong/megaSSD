@@ -1,5 +1,5 @@
-INCLUDES = -I. -I/usr/local/include  -I../../inc \
-	 -I/usr/local/include/boost/include/ -I/usr/include/python3.6/ -I/usr/local/spdk/include \
+INCLUDES = -I. -I/usr/local/include -I/usr/local/include -I../../inc \
+	 -I/usr/local/boost_1_78/include/ -I/usr/include/python3.6m/ -I/usr/local/spdk/include \
 
 SRC =			\
 	IPatternMngr.cpp	\

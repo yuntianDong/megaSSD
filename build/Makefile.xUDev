@@ -2,11 +2,11 @@ LIB_NAME = xUDev.so
 export CC = g++
 export DFLAGS = -g
 
-export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11 #-Wall -Werror -std=c++0x
-LDFLAGS = -L/usr/local/boost/lib -L/usr/local/python3.5/lib -L/usr/lib64
+export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O2 -W -std=c++11 #-Wall -Werror -std=c++0x
+LDFLAGS = -L/usr/local/boost_1_78/lib -L/usr/lib/python3.6 -L/usr/lib64
 LDFLAGS += -lboost_filesystem
-LDFLAGS += -lboost_python35
-LDFLAGS += -lpython3.5m
+LDFLAGS += -lboost_python36
+LDFLAGS += -lpython3
 LDFLAGS += -ludev
 
 SUBDIRS :=		\

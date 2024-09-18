@@ -2,7 +2,7 @@ LIB_NAME = xPower.so
 export CC = g++
 export DFLAGS = -g
 
-export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O0 -W -std=c++11 #-Wall -Werror -std=c++0x
+export CFLAGS = -DBOOST_ALL_DYN_LINK -fPIC -O2 -W -std=c++11 #-Wall -Werror -std=c++0x
 LDFLAGS = -L/usr/local/boost/lib -L/usr/lib/python3.10 -L/usr/lib64
 LDFLAGS += -lboost_filesystem
 LDFLAGS += -lboost_python310

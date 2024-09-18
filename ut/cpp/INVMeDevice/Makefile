@@ -9,16 +9,16 @@ TESTS		= utINVMeDevice
 GTEST_HEADERS	= $(GTEST_DIR)/include/gtest/*.h	\
 				  $(GTEST_DIR)/include/gtest/internal/*.h
 				  
-INCLUDES	:= -I. -I$(SRC_DIR)/inc -I/usr/include -I/usr/local/include/boost/include/ -I/usr/local/include -I/usr/include/python3.6/ -I/usr/local/spdk/include
+INCLUDES	:= -I. -I$(SRC_DIR)/inc -I/usr/include -I/usr/local/boost_1_78/include/ -I/usr/local/include -I/usr/include/python3.6m/ -I/usr/local/spdk/include
 
-LDFLAGS = -L/usr/lib/python3.6 -L/usr/lib64 -L/usr/local/lib -L/usr/local/spdk/lib -L/usr/local/dpdk/lib -L/usr/local/include/boost/lib
+LDFLAGS = -L/usr/lib/python3.6 -L/usr/lib64 -L/usr/local/lib -L/usr/local/spdk/lib -L/usr/local/dpdk/lib -L/usr/local/boost_1_78/lib
 LDFLAGS += -lboost_filesystem
-LDFLAGS += -lboost_python36
+LDFLAGS += -lboost_python36 
 LDFLAGS += -lpython3
 LDFLAGS += -lspdk -lspdk_env_dpdk -lpci -ludev -lssl -lcrypto
 LDFLAGS += -lrte_vhost -lrte_security -lrte_reorder -lrte_dmadev \
 			-lrte_power -lrte_cryptodev -lrte_compressdev -lrte_timer -lrte_hash \
-			-lrte_cmdline -lrte_bus_pci -lrte_pci -lrte_ethdev -lrte_meter -lrte_net -lrte_mbuf \
+			-lrte_cmdline -lrte_bus_pci -lrte_bus_pci -lrte_pci -lrte_ethdev -lrte_meter -lrte_net -lrte_mbuf \
 			-lrte_mempool -lrte_rcu -lrte_ring -lrte_eal -lrte_telemetry -lrte_kvargs 
 
 MODULE_DIR	:=	\

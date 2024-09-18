@@ -49,7 +49,7 @@ boost::python::list buffers_getitem(Buffers & buf,slice index)
 		bounds = index.get_indices<>(buf.GetBufferPoint(),
 				buf.GetBufferPoint()+buf.GetBufSize());
 	}
-	catch(std::invalid_argument){
+	catch(std::invalid_argument& e){
 		PyErr_SetString(PyExc_IndexError, "invalid index parameter");
 		throw boost::python::error_already_set();
 	}
@@ -73,7 +73,7 @@ void buffers_setitem(Buffers & buf,slice index,boost::python::list vals)
 		bounds = index.get_indices<>(buf.GetBufferPoint(),
 				buf.GetBufferPoint()+buf.GetBufSize());
 	}
-	catch(std::invalid_argument){
+	catch(std::invalid_argument& e){
 		PyErr_SetString(PyExc_IndexError, "invalid index parameter");
 		throw boost::python::error_already_set();
 	}

@@ -1,4 +1,4 @@
-INCLUDES = -I. -I/usr/local/include -I../../../inc -I/usr/local/spdk/include -I/usr/local/include/boost/include/
+INCLUDES = -I/usr/local/include -I/usr/local/include -I../../../inc -I/usr/local/spdk/include -I/usr/local/boost_1_78/include/
 
 SRC =			\
 	NVMeScan.cpp	\

@@ -1,5 +1,5 @@
 INCLUDES = -I. -I/usr/local/include  -I../../inc \
-	 -I/usr/local/boost/include -I/usr/include/python3.10/ \
+	 -I/usr/local/boost/include -I/usr/include/python3.6m/ \
 	 
 SRC =			\
 	Convert.cpp	\

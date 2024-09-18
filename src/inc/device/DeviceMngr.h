@@ -18,7 +18,7 @@ public:
     int GetNodeCnt(void)
     {
         int i = 0;
-        for (i; i < MAX_DEVICE_NUM; i++)
+        for (i = 0; i < MAX_DEVICE_NUM; i++)
         {
             if(mbdf[i] == nullptr)
             {

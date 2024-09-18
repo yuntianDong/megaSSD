@@ -3,7 +3,7 @@
 
 #include "buffer/HostBuffer.h"
 
-#define BUFITEM_DESCNAME_LEN		32
+#define BUFITEM_DESCNAME_LEN		33
 #define BUFPOOL_ITEM_MAX			1024
 
 #ifndef UNUSED

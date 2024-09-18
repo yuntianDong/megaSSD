@@ -35,6 +35,7 @@ public:
 	}
 
 	const char* GetDevNameByPciAddr(PCIAddr* pciAddr);
+	const char* GetLinkNameByPciAddr(PCIAddr* pciAddr);
 	PCIAddr* GetPciAddrByDevName(const char* devName);
 };
 

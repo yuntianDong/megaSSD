@@ -6,73 +6,73 @@
 
 #include "buffer/BufferMngr.h"
 
-IoBufPool::IoBufPool(uint32_t bufItemSize,uint32_t bufItemMax,uint32_t sectorSize)
-	:RingBufPool(bufItemSize,bufItemMax,BUF_T_IO,true),muSectorSize(sectorSize)
+IoBufPool::IoBufPool(uint32_t bufItemSize, uint32_t bufItemMax, uint32_t sectorSize)
+	: RingBufPool(bufItemSize, bufItemMax, BUF_T_IO, true), muSectorSize(sectorSize)
 {
 }
 
-Buffers* IoBufPool::CreateBufItem(uint64_t bufSize,const char* mode)
+Buffers *IoBufPool::CreateBufItem(uint64_t bufSize, const char *mode)
 {
-	bufSize	= GetBufItemSize();
+	bufSize = GetBufItemSize();
 
-	switch(menBufType)
+	switch (menBufType)
 	{
-		case BUF_T_IO:
-			return (Buffers*)new SectorBuf(bufSize,muSectorSize,mode);
-		case BUF_T_PATIO:
-			return (Buffers*)new PatternBuf(bufSize,muSectorSize,mode);
-		case BUF_T_UNK:
-		default:
-			LOGERROR("Invalid bufType : %d",menBufType);
-			return NULL;
+	case BUF_T_IO:
+		return (Buffers *)new SectorBuf(bufSize, muSectorSize, mode);
+	case BUF_T_PATIO:
+		return (Buffers *)new PatternBuf(bufSize, muSectorSize, mode);
+	case BUF_T_UNK:
+	default:
+		LOGERROR("Invalid bufType : %d", menBufType);
+		return NULL;
 	}
 
 	return NULL;
 }
 
-bool IoBufPool::NeedReallocated(void* pArgs)
+bool IoBufPool::NeedReallocated(void *pArgs)
 {
-	if(NULL == pArgs)
+	if (NULL == pArgs)
 	{
 		return false;
 	}
-	uint32_t expSectorSize	= *((uint32_t *)pArgs);
+	uint32_t expSectorSize = *((uint32_t *)pArgs);
 
 	return expSectorSize != muSectorSize;
 }
 
 SysBufPool::SysBufPool(uint32_t maxBufPoolSize)
-	:LimSizeBufPool(maxBufPoolSize,BUF_T_UNK,true)
+	: LimSizeBufPool(maxBufPoolSize, BUF_T_UNK, true)
 {
 }
 
-FrmBufPool::FrmBufPool(const char* bufTag,uint32_t maxBufPoolSize)
-	:MaxSizeBufPool(maxBufPoolSize,BUF_T_PAT_REC,true)
+FrmBufPool::FrmBufPool(const char *bufTag, uint32_t maxBufPoolSize)
+	: MaxSizeBufPool(maxBufPoolSize, BUF_T_PAT_REC, true)
 {
-	strncpy(mBufTag,bufTag,FRMWK_POOL_NAME_LEN);
+	strncpy(mBufTag, bufTag, FRMWK_POOL_NAME_LEN - 1);
 	DisableCreateNewBufIfLargerSizeFlag();
 }
 
-Buffers* FrmBufPool::CreateBufItem(uint32_t bufSize,const char* mode)
+Buffers *FrmBufPool::CreateBufItem(uint32_t bufSize, const char *mode)
 {
-	switch(menBufType)
+	switch (menBufType)
 	{
-		case BUF_T_PAT_REC:
-			return (Buffers*)new SwapBuf(mBufTag,bufSize,mode);
-		case BUF_T_UNK:
-		default:
-			LOGERROR("Invalid bufType : %d",menBufType);
-			return NULL;
+	case BUF_T_PAT_REC:
+		return (Buffers *)new SwapBuf(mBufTag, bufSize, mode);
+	case BUF_T_UNK:
+	default:
+		LOGERROR("Invalid bufType : %d", menBufType);
+		return NULL;
 	}
 
 	return NULL;
 }
 
-BufferMngr* BufferMngr::gInstance	= NULL;
+BufferMngr *BufferMngr::gInstance = NULL;
 
-BufferMngr* BufferMngr::GetInstance(void)
+BufferMngr *BufferMngr::GetInstance(void)
 {
-	if(NULL == gInstance)
+	if (NULL == gInstance)
 	{
 		gInstance = new BufferMngr();
 	}
@@ -81,73 +81,73 @@ BufferMngr* BufferMngr::GetInstance(void)
 }
 
 BufferMngr::BufferMngr(void)
-	:mpIoBufPool(NULL),mpSecuBufPool(NULL),mpSysBufPool(NULL),mpFrmBufPool(NULL)
+	: mpIoBufPool(NULL), mpSecuBufPool(NULL), mpSysBufPool(NULL), mpFrmBufPool(NULL)
 {
 }
 
 BufferMngr::~BufferMngr()
 {
-	if(NULL != mpIoBufPool)
+	if (NULL != mpIoBufPool)
 	{
 		delete mpIoBufPool;
-		mpIoBufPool		= NULL;
+		mpIoBufPool = NULL;
 	}
 
-	if(NULL != mpSecuBufPool)
+	if (NULL != mpSecuBufPool)
 	{
 		delete mpSecuBufPool;
-		mpSecuBufPool	= NULL;
+		mpSecuBufPool = NULL;
 	}
 
-	if(NULL != mpSysBufPool)
+	if (NULL != mpSysBufPool)
 	{
 		delete mpSysBufPool;
-		mpSysBufPool	= NULL;
+		mpSysBufPool = NULL;
 	}
 
-	if(NULL != mpFrmBufPool)
+	if (NULL != mpFrmBufPool)
 	{
 		delete mpFrmBufPool;
-		mpFrmBufPool	= NULL;
+		mpFrmBufPool = NULL;
 	}
 }
 
-void BufferMngr::CfgIoBufPool(uint32_t bufItemSize,uint32_t bufItemMax,uint32_t sectorSize)
+void BufferMngr::CfgIoBufPool(uint32_t bufItemSize, uint32_t bufItemMax, uint32_t sectorSize)
 {
-	if(NULL != mpIoBufPool)
+	if (NULL != mpIoBufPool)
 	{
 		delete mpIoBufPool;
-		mpIoBufPool		= NULL;
+		mpIoBufPool = NULL;
 	}
-	mpIoBufPool	= (BaseBufPool*)new IoBufPool(bufItemSize,bufItemMax,sectorSize);
+	mpIoBufPool = (BaseBufPool *)new IoBufPool(bufItemSize, bufItemMax, sectorSize);
 }
 
-void BufferMngr::CfgSecuBufPool(uint32_t bufItemSize,uint32_t bufItemMax,uint32_t sectorSize)
+void BufferMngr::CfgSecuBufPool(uint32_t bufItemSize, uint32_t bufItemMax, uint32_t sectorSize)
 {
-	if(NULL != mpSecuBufPool)
+	if (NULL != mpSecuBufPool)
 	{
 		delete mpSecuBufPool;
-		mpSecuBufPool	= NULL;
+		mpSecuBufPool = NULL;
 	}
-	mpSecuBufPool	= (BaseBufPool*)new IoBufPool(bufItemSize,bufItemMax,sectorSize);
+	mpSecuBufPool = (BaseBufPool *)new IoBufPool(bufItemSize, bufItemMax, sectorSize);
 }
 
 void BufferMngr::CfgSysBufPool(uint32_t maxBufPoolSize)
 {
-	if(NULL != mpSysBufPool)
+	if (NULL != mpSysBufPool)
 	{
 		delete mpSysBufPool;
-		mpSysBufPool	= NULL;
+		mpSysBufPool = NULL;
 	}
-	mpSysBufPool= (BaseBufPool*)new SysBufPool(maxBufPoolSize);
+	mpSysBufPool = (BaseBufPool *)new SysBufPool(maxBufPoolSize);
 }
 
-void BufferMngr::CfgFrmBufPool(const char* bufTag,uint32_t maxBufPoolSize)
+void BufferMngr::CfgFrmBufPool(const char *bufTag, uint32_t maxBufPoolSize)
 {
-	if(NULL != mpFrmBufPool)
+	if (NULL != mpFrmBufPool)
 	{
 		delete mpFrmBufPool;
-		mpFrmBufPool	= NULL;
+		mpFrmBufPool = NULL;
 	}
-	mpFrmBufPool= (BaseBufPool*)new FrmBufPool(bufTag,maxBufPoolSize);
+	mpFrmBufPool = (BaseBufPool *)new FrmBufPool(bufTag, maxBufPoolSize);
 }

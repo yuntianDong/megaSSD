@@ -1,4 +1,4 @@
-INCLUDES = -I. -I/usr/local/include -I../../inc -I/usr/local/include/boost/include/
+INCLUDES = -I. -I/usr/local/include -I../../inc -I/usr/local/boost_1_78/include/
 
 SRC =			\
 	ByteHdlr.cpp	\

@@ -15,7 +15,8 @@
 #include "spdk/env.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include "pci/pci.h"
@@ -25,14 +26,16 @@ extern "C" {
 }
 #endif
 
-#define NVME_IN_USE						"nvme"
-#define UIO_IN_USE						"uio_pci_generic"
-#define PCIE_IN_USE                     "pcie"
+#define NVME_IN_USE "nvme"
+#define UIO_IN_USE "uio_pci_generic"
+#define PCIE_IN_USE "pcie"
 
 /* Delete objects common method */
-#define del_obj(name) \
-    if(name != nullptr){ \
-        delete name; \
-        name = nullptr;}
+#define del_obj(name)    \
+    if (name != nullptr) \
+    {                    \
+        delete name;     \
+        name = nullptr;  \
+    }
 
 #endif

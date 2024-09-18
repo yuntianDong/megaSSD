@@ -47,12 +47,37 @@ const char* NVMeScan::GetDevNameByPciAddr(PCIAddr* pciAddr)
 	{
 		uDevNode* node = mDevScan->GetDevNode(idx);
 		string sysPath	= node->GetSysPath();
-		LOGDEBUG("sysPath = %s",sysPath.c_str());
+		// LOGDEBUG("sysPath = %s",sysPath.c_str());
 
 		if(string::npos != sysPath.find(pciAddr->GetString(),0))
 		{
 			LOGDEBUG("node->GetDevNode() = %s",node->GetDevNode());
 			return node->GetDevNode();
+		}
+	}
+
+	return INVALID_DEV_NAME;
+}
+
+const char* NVMeScan::GetLinkNameByPciAddr(PCIAddr* pciAddr)
+{
+	assert(NULL != pciAddr);
+
+	if(false == mDevScan->DoScan(ScanBy_SubSystem,NVME_DEV_SUBSYSTEM))
+	{
+		LOGERROR("Fail to call DoScan()");
+		return INVALID_DEV_NAME;
+	}
+
+	for(int idx=0;idx<mDevScan->GetDevNodeCount();idx++)
+	{
+		uDevNode* node = mDevScan->GetDevNode(idx);
+		string sysPath	= node->GetSysPath();
+
+		if(string::npos != sysPath.find(pciAddr->GetString(),0))
+		{
+			LOGDEBUG("Dev Link Node is %s",node->GetDevProperty("DEVLINKS"));
+			return node->GetDevProperty("DEVLINKS");
 		}
 	}
 

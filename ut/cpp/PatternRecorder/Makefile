@@ -8,7 +8,7 @@ TESTS		:= utPatternRecorder
 GTEST_HEADERS	= $(GTEST_DIR)/include/gtest/*.h	\
 				  $(GTEST_DIR)/include/gtest/internal/*.h
 				  
-INCLUDES	:= -I. -I$(SRC_DIR)/inc -I/usr/include -I/usr/local/boost/include -I/usr/local/include -I/usr/include/python3.10/
+INCLUDES	:= -I. -I$(SRC_DIR)/inc -I/usr/include -I/usr/local/boost/include -I/usr/local/include -I/usr/include/python3.6m/
 
 LDFLAGS = -L/usr/local/boost/lib -L/usr/lib64 -L/usr/local/lib -L/usr/local/lib/spdk -L/usr/local/lib/dpdk
 LDFLAGS += -lboost_filesystem
@@ -16,7 +16,7 @@ LDFLAGS += -lboost_python310
 LDFLAGS += -lpython3.10
 LDFLAGS += -lrt
 LDFLAGS += -lspdk -lspdk_env_dpdk -lrte_eal -lrte_mempool -lrte_ring -lrte_mbuf \
-            -lrte_mempool_ring -lrte_pci -lrte_bus_pci -lrte_kvargs -lrte_vhost -lrte_net -lrte_hash \
+            -lrte_mempool_ring -lrte_bus_pci -lrte_pci -lrte_bus_pci -lrte_kvargs -lrte_vhost -lrte_net -lrte_hash \
             -lrte_telemetry -lrte_cryptodev -lpci -ludev
 
 MODULE_DIR	:=	\

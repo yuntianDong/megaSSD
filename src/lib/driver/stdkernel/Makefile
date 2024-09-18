@@ -1,4 +1,4 @@
-INCLUDES = -I. -I/usr/local/include -I../../../inc -I/usr/local/spdk/include
+INCLUDES = -I/usr/local/include -I/usr/local/include -I../../../inc -I/usr/local/spdk/include
 
 SRC =			\
 	StdKernelEngine.cpp

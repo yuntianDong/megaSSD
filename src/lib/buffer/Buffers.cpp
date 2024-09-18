@@ -492,7 +492,12 @@ bool Buffers::FromFile(const char* fileName, uint64_t offset, uint32_t length)
 
 	if ((pfile=fopen(fileName, "rb")) !=NULL)
 	{
-		fread(&pBuff[offset], sizeof(uint8_t), length, pfile);
+		size_t bytesRead = fread(&pBuff[offset], sizeof(uint8_t), length, pfile);
+		if (bytesRead != length)
+		{
+			LOGERROR("Read file %s length error expt read %d bytes actual read %ld bytes",fileName,length,bytesRead);
+			return false;
+		}
 		fclose(pfile);
 	}
 	else

@@ -20,7 +20,8 @@ DeviceMngr::DeviceMngr(const char *bdf, bool ifrestore) : mpPcieDeviceHandler{nu
         assert(mpPcieDeviceHandler[i]->GetDevice());
         mppcidev = mpPcieDeviceHandler[i]->GetDevice()->GetOperator()->GetPcieDev();
         pci_fill_info(mppcidev, PCI_FILL_DRIVER);
-        if (driverInUse = pci_get_string_property(mppcidev, PCI_FILL_DRIVER))
+        driverInUse = pci_get_string_property(mppcidev, PCI_FILL_DRIVER);
+        if (driverInUse)
         {
             if (strcmp(driverInUse, NVME_IN_USE) == 0)
             {

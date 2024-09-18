@@ -14,7 +14,7 @@ LDFLAGS = -L/usr/local/boost/lib -L/usr/lib64 -L/usr/local/lib -L/usr/local/lib/
 LDFLAGS += -lboost_filesystem
 LDFLAGS += -lrt
 LDFLAGS += -lspdk -lspdk_env_dpdk -lrte_eal -lrte_mempool -lrte_ring -lrte_mbuf \
-            -lrte_mempool_ring -lrte_pci -lrte_bus_pci -lrte_kvargs -lrte_vhost -lrte_net -lrte_hash \
+            -lrte_mempool_ring -lrte_bus_pci -lrte_pci -lrte_bus_pci -lrte_kvargs -lrte_vhost -lrte_net -lrte_hash \
             -lrte_telemetry -lrte_cryptodev -lpci -ludev
 
 MODULE_DIR	:=	\

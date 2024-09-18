@@ -38,7 +38,6 @@ typedef int (*PFPRINTFN)(const char *,...);
 class Buffers
 {
 private:
-	const char* mdriver;
 	uint8_t* mBuf;
 
 	uint64_t mBufSize;
@@ -46,6 +45,7 @@ private:
 
 	enEndianMode	mEndianMode;
 	bool			mbNeedRelease;
+	const char* mdriver;
 
 	void AllocatBuf(uint64_t size,uint16_t align);
 

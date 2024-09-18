@@ -4,12 +4,13 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/python3.6m",
-                "${workspaceFolder}/ut/cpp/include",
-                "${workspaceFolder}/src/inc/",
-                "/usr/local/spdk/include/**",
-                "/usr/local/include/boost/include/",
-                "/usr/local/include/"
+                "${workspaceFolder}/ut/cpp/include/**",
+                "${workspaceFolder}/src/inc/**",
+                "/usr/local/spdk/include",
+                "/usr/local/boost_1_78/include",
+                "/usr/local/include",
+                "/usr/include",
+                "/usr/include/python3.6m"
             ],
             "defines": [],
             "cStandard": "c17",

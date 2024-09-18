@@ -10,14 +10,17 @@
 class INVMeDevice : IBasicLock
 {
 public:
-	NVMeAdminCmd* getAdmin;
-	NVMeNVMCmd* getIO;
-	DeviceHandler* nvmeNsHandlers[NS_MAX_NUM];
-	INVMeDevice(void):nvmeNsHandlers{nullptr}
-	{getAdmin = nullptr; getIO = nullptr;};
+	NVMeAdminCmd *getAdmin;
+	NVMeNVMCmd *getIO;
+	DeviceHandler *nvmeNsHandlers[NS_MAX_NUM];
+	INVMeDevice(void) : nvmeNsHandlers{nullptr}
+	{
+		getAdmin = nullptr;
+		getIO = nullptr;
+	};
 
-	NVMeAdminCmd* GetCtrlr(Device* device);
-	NVMeNVMCmd* GetNS(Device* device,uint32_t nsID);
+	NVMeAdminCmd *GetCtrlr(Device *device);
+	NVMeNVMCmd *GetNS(Device *device, uint32_t nsID);
 	void ReleaseNS(uint32_t nsID);
 	~INVMeDevice()
 	{

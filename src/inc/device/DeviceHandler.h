@@ -14,7 +14,7 @@ protected:
 	Operator *devoperator;
 
 public:
-	DeviceHandler(){};
+	DeviceHandler() {};
 
 	virtual ~DeviceHandler()
 	{
@@ -31,7 +31,7 @@ public:
 		}
 		else
 		{
-			LOGERROR("Invalid ctrlrID\n");
+			LOGERROR("Device is NULL,something has wrong when generate device\n");
 		}
 		return nullptr;
 	};
